@@ -89,30 +89,20 @@ def edit_profile_view(request):
     if not request.user.is_authenticated:
         return redirect('login') 
 
-    user_details = User_details.objects.filter(user_id=request.user).first() 
+    user_details = User.objects.get(id=request.user.id)
+    user = User_details.objects.get(user_id=user_details.id)
 
     if request.method == "POST":
-        username = request.POST['username']
-        email = request.POST['email']
-        phone_number = request.POST['phone_number']
-        gender = request.POST['gender']
-        address = request.POST['address']
-
-        user = request.user
-        user.username = username
-        user.email = email
+        
+        user.user_id.first_name=request.POST['name']
+        user.user_id.email=request.POST['email']
+        user.gender=request.POST['gender']
+        user.address=request.POST['address']
+        user.phone_number=request.POST['phone_number']
         user.save()
+        return redirect(profile_view)
 
-        if user_details:
-            user_details.phone_number = phone_number
-            user_details.gender = gender
-            user_details.address = address
-            user_details.save()
-
-        context = {'success_message': 'Profile updated successfully.', 'user': user, 'user_details': user_details}
-        return render(request, 'profile.html', context)
-
-    context = {'user': request.user, 'user_details': user_details}
+    context = {'user_details': user}
     return render(request, 'editprofile.html', context)
 
 def delete_profile_view(request):

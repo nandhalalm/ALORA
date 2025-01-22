@@ -17,8 +17,9 @@
 
     <form method="POST">
         {% csrf_token %}
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" value="{{ user.username }}" required><br><br>
+
+        <label for="name">name:</label><br>
+        <input type="text" id="name" name="name" value="{{ user_details.user_id.first_name}}" required><br><br>
 
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" value="{{ user.email }}" required><br><br>
