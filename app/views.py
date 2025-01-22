@@ -54,7 +54,8 @@ def login_view(request):
         admin_user=authenticate(request,username=username,password=password)
         if admin_user is not None and admin_user.is_staff:
             login(request,admin_user)
-            return redirect('admin:index')
+           # return redirect('admin:index')#admin
+            return redirect('admin')
 
         if user is not None:
             login(request, user)
@@ -64,6 +65,9 @@ def login_view(request):
             return render(request, 'login.html', context)
 
     return render(request, 'login.html')
+
+def admin(request):
+   return render(request,'adminhome.html')
 
 def logout_view(request):
     logout(request)
