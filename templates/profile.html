@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+</head>
+<body>
+    <h2>Welcome, {{ user.username }}</h2>
+
+    {% if user_details %}
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone Number:</strong> {{ user_details.phone_number }}</p>
+        <p><strong>Gender:</strong> {{ user_details.gender }}</p>
+        <p><strong>Address:</strong> {{ user_details.address }}</p>
+    {% else %}
+        <p>No profile details found.</p>
+    {% endif %}
+
+    <a href="{% url 'edit_profile' %}">Edit Profile</a><br><br>
+    <a href="{% url 'delete_profile' %}">Delete Profile</a><br><br>
+</body>
+</html>

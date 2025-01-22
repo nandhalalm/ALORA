@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <h3>User Registration</h3>
+        <input type="text" name="name" placeholder="Name" required><br><br>
+        <input type="email" name="email" placeholder="Email" required><br><br>
+        <input type="tel" name="phonenumber" placeholder="PhoneNumber" required><br><br>
+        <input type="radio" name="gender" value="Male">
+        <label for="" >Male</label>&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="gender" value="Female">
+        <label for="">Female</label>
+        <input type="radio" name="gender" value="Other">
+        <label for="">Other</label><br><br>
+        <textarea name="address" placeholder="Address"></textarea><br><br>
+        <input type="text" name="username" placeholder="Username" required><br><br>
+        <input type="password" name="password" placeholder="Password" required><br><br>
+        <input type="password" name="cpassword" placeholder="Confirm Password" required><br><br>
+        <button type="submit">Register</button><br><br>
+    </form>
+   
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+
+    {% if error_message %}
+        <p style="color:red;">{{ error_message }}</p>
+    {% endif %}
+    {% if success_message %}
+        <p style="color:green;">{{ success_message }}</p>
+    {% endif %}
+</body>
+</html>
