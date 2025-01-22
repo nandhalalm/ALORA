@@ -24,12 +24,16 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('',views.index,name='index'),  
     path('login/', views.login_view, name='login'),  
-    path('logout/', views.logout_view, name='logout'), 
+    path('logout/', views.logout_view, name='logout'),
+
     path('userhome/',views.userhome,name='userhome'), 
     path('profile/', views.profile_view, name='profile'),  
     path('edit-profile/', views.edit_profile_view, name='edit_profile'),  
     path('delete-profile/', views.delete_profile_view, name='delete_profile'),
+
+
     path('admin', views.admin, name='admin'), 
+    path('viewusers',views.viewusers,name='viewusers'),
    
 
 ]

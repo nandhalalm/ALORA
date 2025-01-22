@@ -66,19 +66,14 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-def admin(request):
-   return render(request,'adminhome.html')
-
 def logout_view(request):
     logout(request)
     context = {'success_message': 'You have been logged out successfully.'}
     return render(request, 'login.html', context)  
 
 
-
 def userhome(request):
-    return  render(request,'userhome.html')
-
+    return render(request,'userhome.html')
 
 def profile_view(request):
     if not request.user.is_authenticated:
@@ -135,3 +130,18 @@ def delete_profile_view(request):
 
     context = {'user': request.user}
     return render(request, 'delete_profile.html', context)
+
+
+# admin...........................................
+
+def admin(request):
+   return render(request,'adminhome.html')
+
+def viewusers(request):
+ 
+    user_details = User_details.objects.all()
+    context = {
+        
+        'user_details': user_details,
+    }
+    return  render(request,'viewusers.html',context)
