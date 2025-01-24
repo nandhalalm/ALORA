@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import User_details
+from .models import *
+import random
+from django.core.mail import send_mail
+
 
 def index(request):
     return render(request,'index.html')
@@ -135,3 +138,164 @@ def viewusers(request):
         'user_details': user_details,
     }
     return  render(request,'viewusers.html',context)
+
+def hall_details(request):
+    data=Halls.objects.all()
+    return render(request,'hall_details.html',{'data':data})
+
+def add_hall(request):
+    if request.method == 'POST':
+        name=request.POST['hallname']
+        location=request.POST['location']
+        capacity=request.POST['capacity']
+        price=request.POST['price']
+        image=request.FILES['photo']
+        description=request.POST['des']
+        obj=Halls.objects.create(hall_name=name,location=location,capacity=capacity,price_per_day=price,photo_url=image,hall_description=description)
+        obj.save()
+        return redirect(hall_details)
+    else:
+        return render(request,'add_hall.html')
+    
+def food_details(request):
+    data=Food.objects.all()
+    return render(request,'food_details.html',{'data':data})
+
+
+def add_food(request):
+    if request.method == 'POST':
+        name=request.POST['name']
+        image=request.FILES['img']
+        price=request.POST['price']
+        obj=Food.objects.create(food_name=name,food_image=image,food_price=price)
+        obj.save()
+        return redirect(food_details)
+    else:
+        return render(request,'add_food.html')
+    
+ #PASSWORDS
+
+def send_otp(email):
+    otp = random.randint(100000, 999999)
+    send_mail(
+        'Your OTP Code',
+        f'Your OTP code is: {otp}',
+        'nandhalal608@gmail.com',
+        [email],
+        fail_silently=False,
+    )
+    return otp
+
+def password_reset_request(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            otp = send_otp(email)
+            context = {
+                "email": email,
+                "otp": otp,
+                "message": "OTP has been sent to your email."
+            }
+            return render(request, 'forgot_password2.html', context)
+        except User.DoesNotExist:
+            context["error"] = "Email address not found."
+    return render(request, 'forgot_password1.html', context)
+
+def verify_otp(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        otpold = request.POST.get('otp1')
+        otp = request.POST.get('otp2')
+
+        if otpold == otp:
+            context = {
+                'otp': otp,
+                'email': email,
+                "message": "OTP verified successfully."
+            }
+            return render(request, 'forgot_password3.html', context)
+        else:
+            context = {
+                "email": email,
+                "error": "Invalid OTP. Please try again."
+            }
+    return render(request, 'forgot_password2.html', context)
+
+def set_new_password(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        new_password = request.POST.get('password1')
+        confirm_password = request.POST.get('password2')
+
+        if new_password == confirm_password:
+            try:
+                user = User.objects.get(email=email)
+                user.set_password(new_password)
+                user.save()
+                context["success"] = "Password has been reset successfully. Please log in."
+                return redirect(profile_view)
+            except User.DoesNotExist:
+                context["error"] = "User does not exist."
+        else:
+            context = {
+                "email": email,
+                "error": "Passwords do not match. Please try again."
+            }
+    context["email"] = email
+    return render(request, 'forgot_password3.html', context)
+
+#decorations
+
+def decoration_details(request):
+    data=Decoration.objects.all()
+    return render(request,'decoration_details.html',{'data':data})
+def add_decoration(request):
+    if request.method == 'POST':
+        name=request.POST['name']
+        price=request.POST['price']
+        image=request.FILES['image']
+        obj=Decoration.objects.create(decoration_name=name,decoration_price=price,decoration_image=image)
+        obj.save()
+        return redirect(decoration_details)
+    return render(request,'add_decoration.html')
+
+def book_event(request):
+    halls = Halls.objects.all()
+    foods = Food.objects.all()
+    decorations = Decoration.objects.all()
+
+    if request.method == 'POST':
+        hall_id = request.POST.get('hall')
+        food_id = request.POST.get('food')
+        decoration_id = request.POST.get('decoration')
+        photography = request.POST.get('photography', None)
+
+        hall = Halls.objects.get(id=hall_id)
+        food = Food.objects.get(id=food_id)
+        decoration = Decoration.objects.get(id=decoration_id)
+
+        photography_cost = 500 if photography else 0
+        total_payment = hall.price_per_day + food.food_price + decoration.decoration_price + photography_cost
+
+        booking = Bookings.objects.create(
+            user_id=request.user,
+            hall_id=hall,
+            food=food,
+            decoration=decoration,
+            photography=photography,
+            photography_cost=photography_cost,
+            total_payment=total_payment,
+            payment_status="Pending"
+        )
+
+        return redirect('booking_success', booking_id=booking.id)
+
+    return render(request, 'book_event.html', {
+        'halls': halls,
+        'foods': foods,
+        'decorations': decorations
+    })

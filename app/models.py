@@ -15,26 +15,21 @@ class Halls(models.Model):
     location=models.CharField(max_length=200)
     capacity=models.IntegerField()
     price_per_day=models.DecimalField(max_digits=10,decimal_places=2)
-    photo_url=models.FileField(upload_to='images/')
+    photo_url=models.FileField()
     hall_description=models.TextField(null=True,blank=True)
 
-class Events(models.Model):
-    event_name=models.CharField(max_length=100)
-    hall_id=models.ForeignKey(Halls,on_delete=models.CASCADE)
-    event_date=models.DateField()
-    event_description=models.TextField(null=True,blank=True)
-    event_status=models.CharField(max_length=100)
 
 class Food(models.Model):
     food_image=models.FileField(upload_to='images/')
     food_price=models.DecimalField(max_digits=10,decimal_places=2)
+    food_name=models.CharField(max_length=100,null=True)
 
 class Decoration(models.Model):
+    decoration_name=models.CharField(max_length=100,null=True,blank=True)
     decoration_image=models.FileField(upload_to='images/')
     decoration_price=models.DecimalField(max_digits=10,decimal_places=2)
 
 class Bookings(models.Model):
-    event_id=models.ForeignKey(Events,on_delete=models.CASCADE)
     user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     hall_id=models.ForeignKey(Halls,on_delete=models.CASCADE)
     booking_date=models.DateField(auto_now_add=True)

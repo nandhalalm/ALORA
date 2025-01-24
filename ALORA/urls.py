@@ -34,6 +34,18 @@ urlpatterns = [
 
     path('admin', views.admin, name='admin'), 
     path('viewusers',views.viewusers,name='viewusers'),
+    path('addhall',views.add_hall,name='addhall'),
+    path('adddetails',views.hall_details,name='halldetails'),
+    path('addfood',views.add_food,name='addfood'),
+    path('fooddetails',views.food_details,name='fooddetails'),
+
+    path('resetpassword',views.password_reset_request,name='resetpassword'),
+    path('verifyotp',views.verify_otp,name='verifyotp'),
+    path('newpassword',views.set_new_password,name='newpassword'),
+
+    path('adddecoration',views.add_decoration,name='adddecoration'),
+    path('decorationdetails',views.decoration_details,name='decorationdetails'),
+
    
 
 ]
