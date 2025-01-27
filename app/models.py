@@ -30,15 +30,18 @@ class Decoration(models.Model):
     decoration_price=models.DecimalField(max_digits=10,decimal_places=2)
 
 class Bookings(models.Model):
+    event_date=models.DateField(null=True)
+    event_status=models.CharField(max_length=100,default='pending')
     user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     hall_id=models.ForeignKey(Halls,on_delete=models.CASCADE)
     booking_date=models.DateField(auto_now_add=True)
     payment_status=models.CharField(max_length=100)
     photography=models.CharField(max_length=100,null=True,blank=True)
+    food_value=models.BooleanField(null=True,blank=True)
     food=models.ForeignKey(Food,on_delete=models.CASCADE)
+    decoration_value=models.BooleanField(null=True,blank=True)
     decoration=models.ForeignKey(Decoration,on_delete=models.CASCADE)
     photography_cost=models.DecimalField(max_digits=10,decimal_places=2)
     total_payment=models.DecimalField(max_digits=10,decimal_places=2)
-
 
 
