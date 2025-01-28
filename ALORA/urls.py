@@ -46,7 +46,8 @@ urlpatterns = [
     path('adddecoration',views.add_decoration,name='adddecoration'),
     path('decorationdetails',views.decoration_details,name='decorationdetails'),
 
-   
+    path('booking_page',views.booking_page,name='booking_page'),
+    path('booking_view',views.booking_view,name='booking_view'),
 
 ]
 if settings.DEBUG:

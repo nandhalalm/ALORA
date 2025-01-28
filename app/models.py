@@ -37,6 +37,7 @@ class Bookings(models.Model):
     booking_date=models.DateField(auto_now_add=True)
     payment_status=models.CharField(max_length=100)
     photography=models.CharField(max_length=100,null=True,blank=True)
+    no_of_persons=models.IntegerField(null=True,blank=True)
     food_value=models.BooleanField(null=True,blank=True)
     food=models.ForeignKey(Food,on_delete=models.CASCADE)
     decoration_value=models.BooleanField(null=True,blank=True)

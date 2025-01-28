@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Your Event</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="event_date">Event Date</label>
+            <input type="date" name="event_date" id="event_date" required>
+        </div>
+        <div class="form-group">
+            <label for="hall">Select Hall</label>
+            <select name="hall" id="hall" required>
+                {% for hall in halls %}
+                <option value="{{ hall.id }}">{{ hall.hall_name }} - ₹{{ hall.price_per_day }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="food">Select Food (Optional)</label>
+            <select name="food" id="food">
+                <option value="">No Food</option>
+                {% for item in foods %}
+                <option value="{{ item.id }}">{{ item.food_name }} - ₹{{ item.food_price }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="decoration">Select Decoration (Optional)</label>
+            <select name="decoration" id="decoration">
+                <option value="">No Decoration</option>
+                {% for deco in decorations %}
+                <option value="{{ deco.id }}">{{ deco.decoration_name }} - ₹{{ deco.decoration_price }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="photography">Photography (₹5000)</label>
+            <select name="photography" id="photography">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="no_of_persons">Number of Persons</label>
+            <input type="number" name="no_of_persons" id="no_of_persons" min="1" required>
+        </div>
+        <button type="submit" class="btn">Submit Booking</button>
+    </form>
+</body>
+</html>

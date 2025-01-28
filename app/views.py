@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import *
+from django.contrib import messages
 import random
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -263,39 +265,62 @@ def add_decoration(request):
         return redirect(decoration_details)
     return render(request,'add_decoration.html')
 
-def book_event(request):
-    halls = Halls.objects.all()
-    foods = Food.objects.all()
-    decorations = Decoration.objects.all()
+#BOOKINGS................................................................
+
+@login_required(login_url='login')
+def booking_page(request):
+    halls=Halls.objects.all()
+    foods=Food.objects.all()
+    decorations=Decoration.objects.all()
+    photography_price=5000
 
     if request.method == 'POST':
-        hall_id = request.POST.get('hall')
-        food_id = request.POST.get('food')
-        decoration_id = request.POST.get('decoration')
-        photography = request.POST.get('photography', None)
+        event_date=request.POST['event_date']
+        hall_id=request.POST['hall']
+        food_id=request.POST.get('food')                #paranthesis bcz it's optional
+        decoration_id=request.POST.get('decoration')
+        photography=request.POST.get('photography')
+        no_of_persons=int(request.POST['no_of_persons'])
 
-        hall = Halls.objects.get(id=hall_id)
-        food = Food.objects.get(id=food_id)
-        decoration = Decoration.objects.get(id=decoration_id)
+        hall=Halls.objects.get(id=hall_id)
+        food=Food.objects.get(id=food_id)if food_id else None                           #fetch hall,food and decoration object
+        decoration=Decoration.objects.get(id=decoration_id)if decoration_id else None
 
-        photography_cost = 500 if photography else 0
-        total_payment = hall.price_per_day + food.food_price + decoration.decoration_price + photography_cost
+        total_cost=0
+        total_cost=hall.price_per_day
+        if food:
+            total_cost +=food.food_price*no_of_persons
 
-        booking = Bookings.objects.create(
-            user_id=request.user,
-            hall_id=hall,
-            food=food,
+        if decoration:                                                      #Calculation of total price
+            total_cost +=decoration.decoration_price*no_of_persons
+        
+        if photography=='yes':
+            total_cost +=photography_price
+
+        booking=Bookings.objects.create(event_date=event_date,user_id=request.user,hall_id=hall,food=food,
             decoration=decoration,
-            photography=photography,
-            photography_cost=photography_cost,
-            total_payment=total_payment,
-            payment_status="Pending"
+            photography_cost=photography_price if photography == 'yes' else 0,
+            no_of_persons=no_of_persons,
+            total_payment=total_cost,
+            payment_status="pending",
         )
 
-        return redirect('booking_success', booking_id=booking.id)
+        booking.save()
+        return redirect('booking_view')
+    
+    context = {'halls':halls,'foods':foods,'decorations':decorations,'photography_price':photography_price}
+    return render(request,'booking_page.html',context)
 
-    return render(request, 'book_event.html', {
-        'halls': halls,
-        'foods': foods,
-        'decorations': decorations
-    })
+
+@login_required(login_url='login')
+def booking_view(request):
+    booking = Bookings.objects.filter(user_id=request.user).order_by('-id').first()
+    
+    if not booking:
+        messages.error(request, "No booking found.")
+        return redirect('booking_page')
+
+    context = {
+        'booking': booking
+    }
+    return render(request, 'booking_view.html', context)
