@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 import stripe
 from django.conf import settings
-
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 def index(request):
     return render(request,'index.html')
@@ -316,16 +316,22 @@ def booking_page(request):
 
 @login_required(login_url='login')
 def booking_view(request):
-    booking = Bookings.objects.filter(user_id=request.user).order_by('-id').first()
-    
-    if not booking:
-        messages.error(request, "No booking found.")
-        return redirect('booking_page')
-
-    context = {
-        'booking': booking
-    }
-    return render(request, 'booking_view.html', context)
+     user=User.objects.get(id=request.user.id)
+     products=Bookings.objects.filter(user_id=user)
+     items_per_page=1
+     paginator=Paginator(products,items_per_page)
+     page=request.GET.get('page',1)
+     try:
+        products=paginator.page(page)
+     except PageNotAnInteger:
+        products=paginator.page(1)
+     except EmptyPage:
+        products=paginator.page(paginator.num_pages) 
+     context={
+        'products':products,
+        'user':user
+    } 
+     return render(request, 'booking_view.html', context)
 
 #...............ADMIN.....................
 

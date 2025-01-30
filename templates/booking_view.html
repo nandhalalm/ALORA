@@ -3,30 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Details</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>Booking Details</h1>
 
-    <div class="booking-details">
-        <p><strong>Event Date:</strong> {{ booking.event_date }}</p>
-        <p><strong>Hall:</strong> {{ booking.hall_id.name }} ({{ booking.hall_id.location }})</p>
-        <p><strong>Number of Persons:</strong> {{ booking.no_of_persons }}</p>
+    {% for i in products %}
+        <p>
+        Event date:{{i.event_date}} <br>
+        Event Status: {{ i.event_status }} <br>
+        Hall Name:{{i.hall_id.hall_name}} <br>
+        Hall Location:{{i.hall_id.location}} <br>
+        Booking Date:{{i.booking_date}} <br>
+        Photography:{{i.photography}} <br>
+        Food:{{i.food.food_name}} <br>
+        Decoration:{{i.decoration.decoration_name}} <br>
+        Total Payment:{{i.total_payment}} <br>
+        </p>
 
-        {% if booking.food %}
-        <p><strong>Food:</strong> {{ booking.food.food_name }} (Price per person: {{ booking.food.food_price }})</p>
-        {% endif %}
+            {% if i.event_status == 'Accept' %}
+            <p>Status: Accepted</p>
+            {% elif i.event_status == 'Pending' %}
+            <span>Status: Processing</span>
+            {% else %}
+            <span>Status: Denaied</span>
+            {% endif %}
 
-        {% if booking.decoration %}
-        <p><strong>Decoration:</strong> {{ booking.decoration.decoration_name }} (Price per person: {{ booking.decoration.decoration_price }})</p>
-        {% endif %}
+        <form action="{% url 'payment' id=i.id %}">
+            {% csrf_token %}
+            {% if i.event_status == 'Accept' and i.payment_status == 'Pending' %}
+            <input type="submit" value="PAY">
+            {% elif i.payment_status == 'Completed' %}
+            <p>completed</p>
+            {% endif %}
 
-        <p><strong>Photography Cost:</strong> {{ booking.photography_cost }}</p>
-        <p><strong>Total Payment:</strong> {{ booking.total_payment }}</p>
-        <p><strong>Payment Status:</strong> {{ booking.payment_status }}</p>
+        </form>
+    {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+          {% if products.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ products.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current">Page {{ products.number }} of {{ products.paginator.num_pages }}.</span>
+          {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}">Next</a>
+            <a href="?page={{ products.paginator.num_pages }}">Last &raquo;</a>
+          {% endif %}
+        </span>
     </div>
-
-    <a href="{% url 'booking_page' %}" class="btn">Make Another Booking</a>
-    <a href="{% url 'profile' %}" class="btn">Back to Profile</a>
 </body>
 </html>
