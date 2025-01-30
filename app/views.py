@@ -6,6 +6,8 @@ from django.contrib import messages
 import random
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
+import stripe
+from django.conf import settings
 
 
 def index(request):
@@ -324,3 +326,45 @@ def booking_view(request):
         'booking': booking
     }
     return render(request, 'booking_view.html', context)
+
+#...............ADMIN.....................
+
+def admin_view_booking(request):
+    book=Bookings.objects.all()
+    return render(request,'admin_booking.html',{'data':book})
+
+def accept_reject_booking(request,id):
+    data=Bookings.objects.get(id=id)
+    if request.method == 'POST':
+        value=request.POST.get('Status')
+        if value == 'Accept':
+            data.event_status='Accept'
+        elif value == 'Reject':
+            data.event_status='Reject'
+        data.save()
+        return redirect(admin_view_booking)
+    return redirect(admin_view_booking)
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def stripe_payments(request,id):
+    try:
+        data=Bookings.objects.get(id=id)
+        total_amount = data.total_payment
+
+        intent = stripe.PaymentIntent.create(
+            amount=int(total_amount*100),
+            currency="usd",
+            metadata={"data":data.id,"user_id":request.user.id},
+
+        )
+        context = {
+            'client_secret': intent.client_secret,
+            'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLISHABLE_KEY,
+            'total_amount':total_amount,
+            'data':data,
+        }
+        return render(request,'stripe_payments.html',context)
+    except Bookings.DoesNotExist:
+        return redirect(booking_view)
