@@ -14,7 +14,7 @@
         Hall Name:{{i.hall_id.hall_name}} <br>
         Hall Location:{{i.hall_id.location}} <br>
         Booking Date:{{i.booking_date}} <br>
-        Photography:{{i.photography}} <br>
+        Photography:{{i.photography}} <br> 
         Food:{{i.food.food_name}} <br>
         Decoration:{{i.decoration.decoration_name}} <br>
         Total Payment:{{i.total_payment}} <br>
@@ -25,7 +25,7 @@
             {% elif i.event_status == 'Pending' %}
             <span>Status: Processing</span>
             {% else %}
-            <span>Status: Denaied</span>
+            <span>Status: Denied</span>
             {% endif %}
 
         <form action="{% url 'payment' id=i.id %}">
@@ -33,9 +33,9 @@
             {% if i.event_status == 'Accept' and i.payment_status == 'Pending' %}
             <input type="submit" value="PAY">
             {% elif i.payment_status == 'Completed' %}
-            <p>completed</p>
+            <p>completed</p> 
             {% endif %}
-
+             <button><a href="{% url 'payment' id=i.id %}">pay </a></button>
         </form>
     {% endfor %}
 

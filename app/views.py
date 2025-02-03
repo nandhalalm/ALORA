@@ -374,3 +374,9 @@ def stripe_payments(request,id):
         return render(request,'stripe_payments.html',context)
     except Bookings.DoesNotExist:
         return redirect(booking_view)
+    
+def payment_status(request,id):
+    data=Bookings.objects.get(id=id)
+    data.payment_status = "Completed"
+    data.save()
+    return redirect(booking_view)
