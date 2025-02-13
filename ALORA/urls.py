@@ -50,6 +50,7 @@ urlpatterns = [
     path('booking_view',views.booking_view,name='booking_view'),
     path('admin_view_booking',views.admin_view_booking,name='admin_view_booking'),
     path('acceptrejectbooking/<int:id>',views.accept_reject_booking,name='acceptrejectbooking'),
+
     path('payment/<int:id>', views.stripe_payments, name='payment'),
     path('payment_status/<int:id>',views.payment_status,name='payment_status'),
 ]

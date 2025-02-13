@@ -352,31 +352,55 @@ def accept_reject_booking(request,id):
     return redirect(admin_view_booking)
 
 
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-def stripe_payments(request,id):
+def stripe_payments(request, id):
     try:
-        data=Bookings.objects.get(id=id)
+        data = Bookings.objects.get(id=id)
+
+        # Prevent payment if event isn't accepted
+        if data.event_status != "Accept":
+            messages.error(request, "Your booking has not been accepted yet.")
+            return redirect(booking_view)
+
         total_amount = data.total_payment
 
         intent = stripe.PaymentIntent.create(
-            amount=int(total_amount*100),
+            amount=int(total_amount * 100),
             currency="usd",
-            metadata={"data":data.id,"user_id":request.user.id},
-
+            metadata={"data": data.id, "user_id": request.user.id},
         )
         context = {
             'client_secret': intent.client_secret,
             'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLISHABLE_KEY,
-            'total_amount':total_amount,
-            'data':data,
+            'total_amount': total_amount,
+            'data': data,
         }
-        return render(request,'stripe_payments.html',context)
+        return render(request, 'stripe_payments.html', context)
+
     except Bookings.DoesNotExist:
+        messages.error(request, "Booking not found.")
         return redirect(booking_view)
+
     
-def payment_status(request,id):
+#def payment_status(request,id):
     data=Bookings.objects.get(id=id)
     data.payment_status = "Completed"
     data.save()
     return redirect(booking_view)
+
+def payment_status(request, id):
+    data = Bookings.objects.get(id=id)
+    
+    if data.event_status != "Accept":
+        messages.error(request, "Payment cannot be made until the booking is accepted.")
+        return redirect(booking_view)
+
+    data.payment_status = "Completed"
+    data.save()
+    
+    messages.success(request, "Payment completed successfully!")
+    return render(request, 'payment_status.html')
+
+

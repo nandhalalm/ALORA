@@ -4,20 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
+    <style>
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #ddd, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Profile Card */
+        .profile-container {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .profile-container h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Profile Details */
+        .profile-details p {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #333;
+            text-align: left;
+        }
+
+        .profile-details strong {
+            color: black;
+        }
+
+        /* Edit Profile Button */
+        .edit-btn {
+            display: inline-block;
+            padding: 12px;
+            width: 100%;
+            background: black;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: #333;
+        }
+    </style>
 </head>
 <body>
-    <h2>Welcome, {{ user.username }}</h2>
+    <div class="profile-container">
+        <h2>Welcome, {{ user.username }}</h2>
 
-    {% if user_details %}
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Phone Number:</strong> {{ user_details.phone_number }}</p>
-        <p><strong>Gender:</strong> {{ user_details.gender }}</p>
-        <p><strong>Address:</strong> {{ user_details.address }}</p>
-    {% else %}
-        <p>No profile details found.</p>
-    {% endif %}
+        <div class="profile-details">
+            {% if user_details %}
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone Number:</strong> {{ user_details.phone_number }}</p>
+                <p><strong>Gender:</strong> {{ user_details.gender }}</p>
+                <p><strong>Address:</strong> {{ user_details.address }}</p>
+            {% else %}
+                <p>No profile details found.</p>
+            {% endif %}
+        </div>
 
-    <a href="{% url 'edit_profile' %}">Edit Profile</a><br><br>
-   
+        <a href="{% url 'edit_profile' %}" class="edit-btn">Edit Profile</a>
+    </div>
 </body>
 </html>

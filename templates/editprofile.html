@@ -4,6 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #ceaaaa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: #f0dfd4;
+            display: flex;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px rgba(156, 143, 143, 0.2);
+            overflow: hidden;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            width: 30%;
+            background: #dfc7ba;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .left-panel img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .left-panel h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .left-panel p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 70%;
+            padding: 30px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .edit-btn {
+            width: 100%;
+            background: black;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: #fff7f7;
+        }
+
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            background: black;
+            color: white;
+            padding: 10px;
+            text-align: right;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .navbar a {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+    </style>
 </head>
 <body>
     <h2>Edit Profile</h2>
@@ -15,6 +129,16 @@
         <p style="color:red;">{{ error_message }}</p>
     {% endif %}
 
+    <div class="navbar">
+        <strong style="float:left; margin-left: 15px;">ALORA ✨</strong>
+        <a href="#">Home</a>
+        <a href="#">Services</a>
+        <a href="#">About</a>
+        <a href="#">Gallery</a>
+        <a href="#">Testimonials</a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" width="20px"></a>
+    </div>
+   <div>
     <form method="POST">
         {% csrf_token %}
 
@@ -35,7 +159,7 @@
 
         <button type="submit">Save Changes</button>
     </form>
-
+</div>
     <a href="{% url 'profile' %}">Back to Profile</a>
 </body>
 </html>
