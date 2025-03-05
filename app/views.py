@@ -13,6 +13,10 @@ from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 def index(request):
     return render(request,'index.html')
 
+def home(request):
+    return render(request,'home.html')
+
+
 def register_view(request):
     if request.method == "POST":
         name=request.POST['name']
@@ -66,7 +70,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect(userhome) 
+            return redirect('home') 
         else:
             context = {'error_message': 'Invalid username or password.'}
             return render(request, 'login.html', context)
@@ -78,9 +82,6 @@ def logout_view(request):
     context = {'success_message': 'You have been logged out successfully.'}
     return render(request, 'login.html', context)  
 
-
-def userhome(request):
-    return render(request,'userhome.html')
 
 def profile_view(request):
     if not request.user.is_authenticated:
@@ -403,4 +404,14 @@ def payment_status(request, id):
     messages.success(request, "Payment completed successfully!")
     return render(request, 'payment_status.html')
 
+def service(request):
+    return render(request,'service.html')
 
+def about(request):
+    return render(request,'aboutus.html')
+
+def gallery(request):
+    return render(request,'gallery.html')
+
+def testimonials(request):
+    return render(request,'testimonials.html')

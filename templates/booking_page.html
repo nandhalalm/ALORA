@@ -1,118 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Your Event</title>
+    <title>ALORA Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Irish+Grover" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #e8dad6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .container {
-            position: relative;
-            display: inline-block;
-            margin: 10px;
-        }
-        .topleft {
-          
-            top: 5px;
-            left: 20px;
-            font-size: 18px;
-            color: black;
+        
+        .alora h3 {
+            font-family: 'Irish Grover', cursive;
+            font-size: 24px;
             font-weight: bold;
         }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        input[type="date"],
-        input[type="number"],
-        input[type="text"],
-        select {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007BFF;
+
+        .topmenu a {
+            padding: 10px;
             color: white;
-            border: none;
-            margin-top: 10px;
+            text-decoration: none;
+            font-size: large;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        .topmenu a:hover {
+            background-color: rgb(86, 86, 86);
         }
+
+        .gallery-wrapper {
+            margin-top: 20px;
+        }
+
+        .book-form {
+            background: rgba(239, 139, 139, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-form h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        .footer {
+            background-color: #222;
+            color: white;
+            padding: 30px 0;
+            width: 100%;
+            margin-top: auto;
+            text-align: center;
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-section {
+            flex: 1;
+            padding: 10px;
+            min-width: 250px;
+        }
+        
+        .footer-alora {
+            font-family: 'Irish Grover', cursive;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .footer-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin: 5px 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .contact-info div {
+            margin-bottom: 5px;
+        }
+        
+        .address {
+            font-style: italic;
+        }
+        @media (max-width: 991px) { 
+            .gallery-wrapper {
+                flex-direction: column; /* Stack images and form */
+                align-items: center; /* Center everything */
+            }
+        
+            .book-form {
+                width: 100%; /* Adjust form width */
+                margin-top: 10px !important; /* Ensure minimal spacing */
+                min-height: auto; /* Allow dynamic height */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .topnav {
+                flex-direction: column;
+                text-align: center;
+                height: auto;
+                padding: 10px 0;
+            }
+            .topmenu {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .topmenu a {
+                padding: 8px;
+            }
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .book-form {
+                min-height: 600px; /* Increase height for smaller screens */
+            }
+        }
+        .small-img {
+            width: 100%; /* Adjust percentage as needed */
+            height: 100%;
+        }
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link:hover {
+           
+            background-color: rgb(86, 86, 86);
+        }
+        .navbar-brand {
+            margin-left: 40px; /* Adjust as needed */
+        }
+        .custom-navbar .nav-link {
+            font-size: 20px; /* Increase font size */
+            padding: 5px 0; /* Increase space between items */
+        }
+        .custom-navbar {
+            gap: 30px; /* Adjust spacing between items */
+        }
+        .book-form {
+            background: rgba(239, 139, 139, 0.8);
+            padding: 50px; /* Increase padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-height: 40%; /* Adjust minimum height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 45%;
+            gap: 30px; 
+        }
+        .book-form .mb-3 {
+            width: 100%; /* Ensures inputs take full width */
+            margin-bottom: 50px; /* Space between form fields */
+        }
+        
+        .book-form label {
+            font-weight: bold; /* Makes labels more readable */
+            margin-bottom: 5px; /* Adds small space below labels */
+        }
+        
     </style>
 </head>
 <body>
-    <h1>Book Your Event</h1>
-    <form action="{% url 'booking_page' %}" method="POST">
-        {% csrf_token %}
+  <!-- Top Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-black">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <h3 class="mb-0" style="font-family: 'Irish Grover', cursive;">ALORA</h3>
+            <img src="{% static 'aloral.png' %}" class="ms-2" alt="Alora Logo" width="30">
+        </a>
         
-        <div class="form-group">
-            <label for="event_date">Select Date:</label>
-            <input type="date" id="event_date" name="event_date" min="" required>
-        </div>
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <label for="data">Halls:</label>
-        {% for hall in halls %}
-        <label>
-            <div class="container">
-                <input type="checkbox" name="hall" value="{{ hall.id }}">
-                <img src="{{ hall.photo_url.url }}" alt="" style="height: 100px; width: 100px;">
-                <div class="topleft">Price: ₹{{ hall.price_per_day }}<p>(People: {{ hall.capacity }})</p></div>
+        <!-- Collapsible Navbar Links (Centered) -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav text-center ms-3 custom-navbar">
+                <li class="nav-item">
+                    <a class="nav-link" href="#Home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#About">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Gallery">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#testimony">Testimonials</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2 class="text-center">Your Dream Event Starts Here!</h2>
+        
+        <div class="row gallery-wrapper">
+            <!-- Image Gallery -->
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <img src="{% static 'wwd.jpg' %}" alt="bride friends" class="img-fluid rounded border small-img" >
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <img src="{% static 'haldi2.jpeg' %}" alt="haldi" class="img-fluid rounded border">
+                        <img src="{% static 'wedding.png' %}" alt="wed" class="img-fluid rounded border mt-2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <img src="{% static 'wedgall.webp' %}" alt="stage" class="img-fluid rounded border">
+                        <img src="{% static 'haldi.jpeg' %}" alt="haldi2" class="img-fluid rounded border mt-2">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <img src="{% static 'wwt.jpg' %}" alt="wed2" class="img-fluid rounded border small-img ">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <img src="{% static 'party1.jpeg' %}"alt="party" class="img-fluid rounded border">
+                    </div>
+                </div>
             </div>
-        </label>
-        {% endfor %}
 
-        <div class="form-group">
-            <label for="food">Select Food (Optional):</label>
-            <select name="food" id="food">
-                <option value="">No Food</option>
-                {% for item in foods %}
-                <option value="{{ item.id }}">{{ item.food_name }} - ₹{{ item.food_price }}</option>
-                {% endfor %}
-            </select>
+            <!-- Booking Form -->
+            <div class="col-lg-6">
+                <div class="book-form">
+                    <h3>Book Your Event</h3>
+                    <form action="{% url 'booking_page' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="event_date">Select Date:</label>
+                            <input type="date" id="event_date" name="event_date" class="form-control" min="" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hall">Select Hall:</label>
+                            <select name="hall" class="form-select" required>
+                                <option value="">Select a Hall</option>
+                                {% for hall in halls %}
+                                <option value="{{ hall.id }}">{{ hall.name }} - Capacity: {{ hall.capacity }} - Price: ₹{{ hall.price_per_day }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="food">Select Food (Optional):</label>
+                            <select name="food" class="form-select">
+                                <option value="">No Food</option>
+                                {% for item in foods %}
+                                <option value="{{ item.id }}">{{ item.food_name }} - ₹{{ item.food_price }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="decoration">Select Decoration (Optional):</label>
+                            <select name="decoration" class="form-select">
+                                <option value="">No Decoration</option>
+                                {% for deco in decorations %}
+                                <option value="{{ deco.id }}">{{ deco.decoration_name }} - ₹{{ deco.decoration_price }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="photography">Photography (₹5000):</label>
+                            <select name="photography" class="form-select">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="no_of_persons">Number of Persons:</label>
+                            <input type="number" name="no_of_persons" class="form-control" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customization">Customization:</label>
+                            <input type="text" id="customization" name="customization" class="form-control" placeholder="Enter customization preferences">
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Book Now</button>
+                    </form>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="decoration">Select Decoration (Optional):</label>
-            <select name="decoration" id="decoration">
-                <option value="">No Decoration</option>
-                {% for deco in decorations %}
-                <option value="{{ deco.id }}">{{ deco.decoration_name }} - ₹{{ deco.decoration_price }}</option>
-                {% endfor %}
-            </select>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- ALORA Section -->
+            <div class="footer-section">
+                <div class="footer-alora">ALORA</div>
+                <div class="copyright">
+                    Copyright © Alora Events.<br>
+                     All rights reserved.<br>
+                </div>
+            </div>
+            
+            <!-- Links Section -->
+            <div class="footer-section">
+                <div class="footer-title">Links</div>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact Us Section -->
+            <div class="footer-section">
+                <div class="footer-title">Contact Us</div>
+                <div class="contact-info">
+                    <div>aloraevents@gmail.com</div>
+                    <div>Phone: 9633769633</div>
+                    <div>9645757016</div>
+                    <div class="address">
+                        37/1143-B Karanthur,
+                        Nilambur Rd, 2nd
+                        Floor,
+                        Paradise, Kondotty,<br>
+                        Kerala 673638
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="photography">Photography (₹5000):</label>
-            <select name="photography" id="photography">
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="no_of_persons">Number of Persons:</label>
-            <input type="number" name="no_of_persons" id="no_of_persons" min="1" required>
-        </div>
-
-        <div class="form-group">
-            <label for="customization">Customization:</label>
-            <input type="text" id="customization" name="customization" placeholder="Enter your customization preferences">
-        </div>
-
-        <button type="submit">Book</button>
-    </form>
+    </footer>
 
     <script>
         document.getElementById("event_date").min = new Date().toISOString().split("T")[0];
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -26,7 +26,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),  
     path('logout/', views.logout_view, name='logout'),
 
-    path('userhome/',views.userhome,name='userhome'), 
+    path('home/',views.home,name='home'), 
     path('profile/', views.profile_view, name='profile'),  
     path('edit-profile/', views.edit_profile_view, name='edit_profile'),  
     path('delete-profile/', views.delete_profile_view, name='delete_profile'),
@@ -53,6 +53,11 @@ urlpatterns = [
 
     path('payment/<int:id>', views.stripe_payments, name='payment'),
     path('payment_status/<int:id>',views.payment_status,name='payment_status'),
+
+    path('service',views.service,name='service'),
+    path('about',views.about,name='about'),
+    path('gallery',views.gallery,name='gallery'),
+    path('testimonials',views.testimonials,name='testimonials'),
 ]
 if settings.DEBUG:
     

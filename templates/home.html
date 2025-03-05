@@ -215,12 +215,12 @@
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'service' %}">Services</a>
         <a href="{% url 'about' %}">About</a>
-        <a href="{% url 'gallery' %}">Gallery</a>
-        <a href="{% url 'testimonials' %}">Testimonials</a>
+        <a href="">Gallery</a>
+        <a href="">Testimonials</a>
       </div>
       <div class="rc3">
-          <a href="{% url 'register' %}">Register</a>
-          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'logout' %}">Logout</a>
       </div>
       <div class="rc4">
         <div class="dropdown">
@@ -228,18 +228,14 @@
             <i class="bi bi-list"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-dark">
-            <li><a class="dropdown-item active" href="#">Home</a></li>
+            <li><a class="dropdown-item active" href="{% url 'home' %}">Home</a></li>
             <li><a class="dropdown-item" href="{% url 'service' %}">Services</a></li>
             <li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
             <li><a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a></li>
             <li><a class="dropdown-item" href="{% url 'testimonials' %}">Testimonials</a></li>
             <li><hr class="dropdown-divider"></li>
-            {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'profile' %}">profile</a></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-              <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
-              <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-            {% endif %}
           </ul>
         </div>
       </div>
