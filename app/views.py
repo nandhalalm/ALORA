@@ -257,7 +257,7 @@ def set_new_password(request):
 
 def decoration_details(request):
     data=Decoration.objects.all()
-    return render(request,'decoration_details.html',{'data':data})
+    return render(request,'decoration_details.html',{'datas':data})
 def add_decoration(request):
     if request.method == 'POST':
         name=request.POST['name']
