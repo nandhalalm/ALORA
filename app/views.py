@@ -415,3 +415,4 @@ def gallery(request):
 
 def testimonials(request):
     return render(request,'testimonials.html')
+ 
