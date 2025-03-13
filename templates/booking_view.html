@@ -1,57 +1,390 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Your Bookings</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Irish Grover' rel='stylesheet'>
+    <style>
+         /* Navbar Styles */
+         .topnav {
+            background-color: black;
+            color: white;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .alora {
+            width: 110px;
+            margin-left: 40px;
+            display: flex;
+            padding-top: 10px;
+        }
+
+        .alora h3 {
+            font-family: 'Irish Grover';
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+        }
+
+        .topmenu {
+            width: 550px;
+            margin-right: 500px;
+        }
+
+        .topmenu a {
+            padding: 10px 18px;
+            color: white;
+            text-decoration: none;
+            font-size: large;
+        }
+
+        .topmenu a:hover {
+            background-color: rgb(86, 86, 86);
+        }
+
+        .topmenu a:active {
+            color: rgb(10, 9, 9);
+        }
+
+        /* Toggle Button Styles */
+        .toggle-button {
+            display: none; /* Hide by default */
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .toggle-button .bar {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        /* Mobile Navigation Styles */
+        @media (max-width: 768px) {
+            .toggle-button {
+                display: flex; /* Show toggle button on mobile */
+            }
+
+            .topmenu {
+                display: none; /* Hide the menu by default on mobile */
+                flex-direction: column;
+                width: 100%;
+                background-color: black;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                z-index: 1000;
+            }
+
+            .topmenu.active {
+                display: flex; /* Show the menu when active */
+            }
+
+            .topmenu a {
+                padding: 15px;
+                text-align: center;
+            }
+        }
+
+        /* Body and Container Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Booking Card Styles */
+        .booking-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .booking-date {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #5a4a42;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-accept {
+            background-color: #e6f7ee;
+            color: #0f9d58;
+        }
+
+        .status-pending {
+            background-color: #fff8e1;
+            color: #ff9800;
+        }
+
+        .status-rejected {
+            background-color: #fdeded;
+            color: #d32f2f;
+        }
+
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #7d6b63;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        /* Payment Button Styles */
+        .payment-button {
+            background-color: #5a4a42;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-button:hover {
+            background-color: #483c36;
+        }
+
+        .payment-complete {
+            color: #0f9d58;
+            font-weight: bold;
+        }
+
+        /* Pagination Styles */
+        .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            color: #5a4a42;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #bfa79b;
+            border-radius: 4px;
+            margin: 0 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #bfa79b;
+            color: white;
+        }
+
+        .pagination .current {
+            padding: 8px 16px;
+            background-color: #5a4a42;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        /* Debug Info */
+        .debug-info {
+            background-color: #f8f9fa;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-
-    {% for i in products %}
-        <p>
-        Event date:{{i.event_date}} <br>
-        Event Status: {{ i.event_status }} <br>
-        Hall Name:{{i.hall_id.hall_name}} <br>
-        Hall Location:{{i.hall_id.location}} <br>
-        Booking Date:{{i.booking_date}} <br>
-        Photography:{{i.photography}} <br> 
-        Food:{{i.food.food_name}} <br>
-        Decoration:{{i.decoration.decoration_name}} <br>
-        Total Payment:{{i.total_payment}} <br>
-        </p>
-
-            {% if i.event_status == 'Accept' %}
-            <p>Status: Accepted</p>
-            {% elif i.event_status == 'Pending' %}
-            <span>Status: Processing</span>
-            {% else %}
-            <span>Status: Denied</span>
-            {% endif %}
-
-        <form action="{% url 'payment' id=i.id %}">
-            {% csrf_token %}
-            {% if i.event_status == 'Accept' and i.payment_status == 'Pending' %}
-            <input type="submit" value="PAY">
-            {% elif i.payment_status == 'Completed' %}
-            <p>completed</p> 
-            {% endif %}
-             <button><a href="{% url 'payment' id=i.id %}">pay </a></button>
-        </form>
-    {% endfor %}
-
-
-    <div class="pagination">
-        <span class="step-links">
-          {% if products.has_previous %}
-            <a href="?page=1">&laquo; First</a>
-            <a href="?page={{ products.previous_page_number }}">Previous</a>
-          {% endif %}
-          <span class="current">Page {{ products.number }} of {{ products.paginator.num_pages }}.</span>
-          {% if products.has_next %}
-            <a href="?page={{ products.next_page_number }}">Next</a>
-            <a href="?page={{ products.paginator.num_pages }}">Last &raquo;</a>
-          {% endif %}
-        </span>
+    <!-- Navbar Section -->
+    <div class="topnav">
+        <div class="alora">
+            <h3>ALORA</h3>
+            <img src="{% static 'aloral.png' %}" class="logo">
+        </div>
+        <div class="topmenu">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'service' %}">Services</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a href="{% url 'testimonials' %}">Testimonials</a>
+        </div>
+        <!-- Toggle Button for Mobile -->
+        <div class="toggle-button">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 style="text-align: center; color: #5a4a42; margin-bottom: 30px;">Your Bookings</h1>
+
+        <!-- Display Payment Success/Failure Messages -->
+        {% if request.GET.payment_success %}
+            <div class="alert alert-success" role="alert">
+                Payment completed successfully!
+            </div>
+        {% elif request.GET.payment_failed %}
+            <div class="alert alert-danger" role="alert">
+                Payment failed. Please try again.
+            </div>
+        {% endif %}
+
+        {% for i in products %}
+            <div class="booking-card">
+                <div class="booking-header">
+                    <div class="booking-date">{{ i.event_date }}</div>
+                    <div>
+                        <span class="status-badge {% if i.event_status == 'Accept' %}status-accept{% elif i.event_status == 'Pending' %}status-pending{% else %}status-rejected{% endif %}">
+                            {{ i.event_status }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="booking-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Venue</span>
+                        <span class="detail-value">{{ i.hall_id.hall_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">{{ i.hall_id.location }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Booking Date</span>
+                        <span class="detail-value">{{ i.booking_date }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Photography</span>
+                        <span class="detail-value">{{ i.photography }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Food</span>
+                        <span class="detail-value">{{ i.food.food_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Decoration</span>
+                        <span class="detail-value">{{ i.decoration.decoration_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total Payment</span>
+                        <span class="detail-value">${{ i.total_payment }}</span>
+                    </div>
+                </div>
+
+                
+
+                <!-- Pay Button Section - Multiple options to ensure it works -->
+                <div style="margin-top: 20px;">
+                    <!-- Option 1: Original code with added conditions -->
+                    {% if i.event_status == 'Accept' or i.event_status == 'Accepted' or i.event_status == 'ACCEPT' or i.event_status == 'accept' %}
+                        {% if i.payment_status == 'Pending' or i.payment_status == 'pending' or i.payment_status == 'PENDING' %}
+                            <form action="{% url 'payment' id=i.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="payment-button">Pay Now</button>
+                            </form>
+                        {% elif i.payment_status == 'Completed' or i.payment_status == 'completed' or i.payment_status == 'COMPLETED' %}
+                            <p class="payment-complete">✓ Payment Completed</p>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <!-- Option 2: Simpler approach without nested conditions -->
+                    {% if i.event_status == 'Accept' and i.payment_status == 'Pending' %}
+                        <a href="{% url 'payment' id=i.id %}" class="payment-button" style="text-decoration: none; display: inline-block; margin-top: 10px;">Pay Now (Link)</a>
+                    {% endif %}
+                    
+    
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if products.has_previous %}
+                    <a href="?page=1">&laquo; First</a>
+                    <a href="?page={{ products.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="current">Page {{ products.number }} of {{ products.paginator.num_pages }}.</span>
+                {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}">Next</a>
+                    <a href="?page={{ products.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <!-- JavaScript for Toggle Button -->
+    <script>
+        const toggleButton = document.querySelector('.toggle-button');
+        const topmenu = document.querySelector('.topmenu');
+
+        toggleButton.addEventListener('click', () => {
+            topmenu.classList.toggle('active');
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

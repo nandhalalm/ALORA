@@ -1,9 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Irish Grover' rel='stylesheet'>
     <style>
         * {
             box-sizing: border-box;
@@ -17,17 +20,120 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            margin: 0;
         }
 
+        /* Navbar Styles */
+        .topnav {
+            background-color: black;
+            color: white;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .alora {
+            width: 110px;
+            margin-left: 40px;
+            display: flex;
+            padding-top: 10px;
+        }
+
+        .alora h3 {
+            font-family: 'Irish Grover';
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+        }
+
+        .topmenu {
+            width: 550px;
+            margin-right: 500px;
+        }
+
+        .topmenu a {
+            padding: 10px 18px;
+            color: white;
+            text-decoration: none;
+            font-size: large;
+        }
+
+        .topmenu a:hover {
+            background-color: rgb(86, 86, 86);
+        }
+
+        .topmenu a:active {
+            color: rgb(10, 9, 9);
+        }
+
+        /* Toggle Button Styles */
+        .toggle-button {
+            display: none; /* Hide by default */
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .toggle-button .bar {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        /* Mobile Navigation Styles */
+        @media (max-width: 768px) {
+            .toggle-button {
+                display: flex; /* Show toggle button on mobile */
+            }
+
+            .topmenu {
+                display: none; /* Hide the menu by default on mobile */
+                flex-direction: column;
+                width: 100%;
+                background-color: black;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                z-index: 1000;
+            }
+
+            .topmenu.active {
+                display: flex; /* Show the menu when active */
+            }
+
+            .topmenu a {
+                padding: 15px;
+                text-align: center;
+            }
+        }
+
+        /* Profile Container Styles */
         .container {
-            width: 80%;
+            width: 90%;
             max-width: 900px;
             background: #f0dfd4;
             display: flex;
             border-radius: 10px;
             box-shadow: 0px 8px 16px rgba(156, 143, 143, 0.2);
             overflow: hidden;
+            margin-top: 80px; /* To avoid overlap with navbar */
         }
 
         /* Left Panel */
@@ -70,96 +176,174 @@
         }
 
         .form-group {
-            display: flex;
-            gap: 15px;
             margin-bottom: 15px;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: 500;
         }
 
-        .edit-btn {
+        .form-control {
             width: 100%;
-            background: black;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: #c1a599;
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: #ce8667;
             color: white;
-            padding: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
             border: none;
-            transition: 0.3s;
-        }
-
-        .edit-btn:hover {
-            background: #fff7f7;
-        }
-
-        /* Navbar */
-        .navbar {
+            border-radius: 6px;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
             width: 100%;
-            background: black;
-            color: white;
-            padding: 10px;
-            text-align: right;
-            position: absolute;
-            top: 0;
-            left: 0;
+            transition: background-color 0.3s;
         }
 
-        .navbar a {
-            color: white;
-            margin-right: 15px;
+        .submit-btn:hover {
+            background-color: #b09185;
+        }
+
+        .cancel-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #777;
             text-decoration: none;
         }
 
+        .cancel-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel, .right-panel {
+                width: 100%;
+            }
+
+            .left-panel {
+                padding: 20px;
+            }
+
+            .right-panel {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2>Edit Profile</h2>
-
-    {% if success_message %}
-        <p style="color:green;">{{ success_message }}</p>
-    {% endif %}
-    {% if error_message %}
-        <p style="color:red;">{{ error_message }}</p>
-    {% endif %}
-
-    <div class="navbar">
-        <strong style="float:left; margin-left: 15px;">ALORA ✨</strong>
-        <a href="#">Home</a>
-        <a href="#">Services</a>
-        <a href="#">About</a>
-        <a href="#">Gallery</a>
-        <a href="#">Testimonials</a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" width="20px"></a>
+    <!-- New Navigation Bar -->
+    <div class="topnav">
+        <div class="alora">
+            <h3>ALORA</h3>
+            <img src="{% static 'aloral.png' %}" class="logo">
+        </div>
+        <div class="topmenu">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'service' %}">Services</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a href="{% url 'testimonials' %}">Testimonials</a>
+        </div>
+        <!-- Toggle Button for Mobile -->
+        <div class="toggle-button">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
     </div>
-   <div>
-    <form method="POST">
-        {% csrf_token %}
 
-        <label for="name">name:</label><br>
-        <input type="text" id="name" name="name" value="{{ user_details.user_id.first_name}}" required><br><br>
+    <!-- Profile Container -->
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <img src="{% static 'oip.jpg' %}" alt="Profile picture">
+            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            <p>{{ user.email }}</p>
+        </div>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" value="{{ user.email }}" required><br><br>
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <h2>Edit Profile</h2>
 
-        <label for="phone_number">Phone Number:</label><br>
-        <input type="text" id="phone_number" name="phone_number" value="{{ user_details.phone_number }}" required><br><br>
+            {% if success_message %}
+                <p style="color:green;">{{ success_message }}</p>
+            {% endif %}
+            {% if error_message %}
+                <p style="color:red;">{{ error_message }}</p>
+            {% endif %}
 
-        <label for="gender">Gender:</label><br>
-        <input type="text" id="gender" name="gender" value="{{ user_details.gender }}" required><br><br>
+            <form method="POST">
+                {% csrf_token %}
 
-        <label for="address">Address:</label><br>
-        <textarea id="address" name="address" required>{{ user_details.address }}</textarea><br><br>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" name="name" value="{{ user_details.user_id.first_name }}" required>
+                </div>
 
-        <button type="submit">Save Changes</button>
-    </form>
-</div>
-    <a href="{% url 'profile' %}">Back to Profile</a>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" name="email" value="{{ user.email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" class="form-control" name="phone_number" value="{{ user_details.phone_number }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="form-control" name="gender">
+                        <option value="Male" {% if user_details.gender == "Male" %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if user_details.gender == "Female" %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if user_details.gender == "Other" %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" class="form-control" name="address" required>{{ user_details.address }}</textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Update Profile</button>
+                <a href="{% url 'profile' %}" class="cancel-link">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript for Toggle Button -->
+    <script>
+        const toggleButton = document.querySelector('.toggle-button');
+        const topmenu = document.querySelector('.topmenu');
+
+        toggleButton.addEventListener('click', () => {
+            topmenu.classList.toggle('active');
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

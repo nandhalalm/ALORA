@@ -24,7 +24,6 @@ def register_view(request):
         email = request.POST['email']
         password1 = request.POST['password']
         password2 = request.POST['cpassword']
-        address=request.POST['address']
         gender=request.POST['gender']
         phonenumber=request.POST['phonenumber']
 
@@ -47,7 +46,7 @@ def register_view(request):
         user = User.objects.create_user(first_name=name,username=username, email=email, password=password1)
         user.save()
 
-        user_details = User_details.objects.create(user_id=user,gender=gender,phone_number=phonenumber,address=address)
+        user_details = User_details.objects.create(user_id=user,gender=gender,phone_number=phonenumber)
         user_details.save()
 
         context = {'success_message': 'Account created successfully. Please log in.'}
