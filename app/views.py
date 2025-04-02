@@ -26,6 +26,7 @@ def register_view(request):
         password2 = request.POST['cpassword']
         gender=request.POST['gender']
         phonenumber=request.POST['phonenumber']
+        address=request.POST['address']
 
         if password1 != password2:
             context = {'error_message': 'Passwords do not match.'}
@@ -42,11 +43,12 @@ def register_view(request):
         if User_details.objects.filter(phone_number=phonenumber).exists():
             context = {'error_message': 'phone number not match.'}
             return render(request, 'register.html', context)
+        
 
         user = User.objects.create_user(first_name=name,username=username, email=email, password=password1)
         user.save()
 
-        user_details = User_details.objects.create(user_id=user,gender=gender,phone_number=phonenumber)
+        user_details = User_details.objects.create(user_id=user,gender=gender,phone_number=phonenumber,address=address)
         user_details.save()
 
         context = {'success_message': 'Account created successfully. Please log in.'}
