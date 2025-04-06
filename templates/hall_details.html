@@ -7,6 +7,7 @@
     <title>Admin Dashboard | ALORA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Irish Grover' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             background-color: #e8dad6;
@@ -96,74 +97,88 @@
             color: white;
         }
 
-        .stats-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .stats-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2d2d2d;
-            margin: 10px 0;
-        }
-
-        .stats-label {
-            color: #666;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        .upcoming-events {
-            margin-top: 30px;
-        }
-
-        .event-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .event-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .event-details {
-            color: #666;
-            font-size: 14px;
-        }
-
         /* Table Styling */
         .hall-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .hall-table th, .hall-table td {
-            padding: 12px;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
-            color: #2d2d2d;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .hall-table th {
             background-color: #2d2d2d;
             color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .hall-table tr:hover {
+            background-color: #f9f9f9;
         }
 
         .hall-table img {
-            width: 200px;
-            height: auto;
-            border-radius: 5px;
+            width: 120px;
+            height: 80px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-view {
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+
+        .btn-view:hover {
+            background-color: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background-color: #2d2d2d;
+            color: white;
+            border: none;
+        }
+
+        .btn-edit:hover {
+            background-color: #3d3d3d;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+            transform: translateY(-1px);
         }
 
         /* Responsive Styles */
@@ -182,11 +197,11 @@
             .hall-table {
                 display: block;
                 overflow-x: auto;
-                white-space: nowrap;
             }
 
             .hall-table img {
-                width: 100px;
+                width: 80px;
+                height: 60px;
             }
 
             .top-nav {
@@ -197,11 +212,17 @@
             .welcome-section {
                 margin-right: 0;
                 margin-bottom: 20px;
+                width: 100%;
             }
 
             .logout-btn {
                 width: 100%;
                 text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
             }
         }
 
@@ -221,11 +242,18 @@
             }
 
             .hall-table th, .hall-table td {
-                padding: 8px;
+                padding: 10px;
+                font-size: 14px;
             }
 
             .hall-table img {
-                width: 80px;
+                width: 60px;
+                height: 40px;
+            }
+
+            .btn-action {
+                padding: 5px 8px;
+                font-size: 12px;
             }
         }
     </style>
@@ -268,6 +296,7 @@
                         <th>Location</th>
                         <th>Price (Per Day)</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -276,7 +305,20 @@
                         <td>{{ x.hall_name }}</td>
                         <td>{{ x.location }}</td>
                         <td>${{ x.price_per_day }}</td>
-                        <td><img src="{{ x.photo_url.url }}" alt="{{ x.hall_name }}" height="100px" width="100px"></td>
+                        <td><img src="{{ x.photo_url.url }}" alt="{{ x.hall_name }}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'hall_detail' x.id %}" class="btn-action btn-view">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="{% url 'edithall' x.id %}" class="btn-action btn-edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="{% url 'deletehall' x.id %}" class="btn-action btn-delete">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

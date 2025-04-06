@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
 from django.contrib import messages
@@ -163,6 +164,45 @@ def add_hall(request):
     else:
         return render(request,'add_hall.html')
     
+
+#new requirements...........................................................................................
+def edit_hall(request, id):
+    hall = Halls.objects.get(id=id)
+    
+    if request.method == 'POST':
+        hall.hall_name = request.POST['hallname']
+        hall.location = request.POST['location']
+        hall.capacity = request.POST['capacity']
+        hall.price_per_day = request.POST['price']
+        hall.hall_description = request.POST['des']
+        
+        # Only update image if a new one is provided
+        if 'photo' in request.FILES:
+            hall.photo_url = request.FILES['photo']
+            
+        hall.save()
+        return redirect('halldetails')
+    
+    context = {'hall': hall}
+    return render(request, 'edit_hall.html', context)
+
+def delete_hall(request, id):
+    hall = Halls.objects.get(id=id)
+    
+    if request.method == 'POST':
+        hall.delete()
+        return redirect('halldetails')
+    
+    context = {'hall': hall}
+    return render(request, 'delete_hall.html', context)
+
+def hall_detail_view(request, hall_id):
+    hall = get_object_or_404(Halls, id=hall_id)
+    return render(request, 'view_hall_detail.html', {'hall': hall})
+
+
+
+    
 def food_details(request):
     data=Food.objects.all()
     return render(request,'food_details.html',{'data':data})
@@ -179,6 +219,39 @@ def add_food(request):
     else:
         return render(request,'add_food.html')
     
+
+#new requirements..........................................................................
+@login_required(login_url='login')
+def update_food(request, food_id):
+    if not request.user.is_staff:
+        messages.error(request, "You are not authorized to perform this action.")
+        return redirect('admin')
+
+    food = get_object_or_404(Food, id=food_id)
+
+    if request.method == 'POST':
+        food.food_name = request.POST['food_name']
+        food.food_price = request.POST['food_price']
+        if 'food_image' in request.FILES:
+            food.food_image = request.FILES['food_image']
+        food.save()
+        messages.success(request, "Food item updated successfully!")
+        return redirect('fooddetails')
+    
+    context = {'food': food}
+    return render(request, 'update_food.html', context)
+
+def delete_food(request, food_id):
+    food = get_object_or_404(Food, id=food_id)
+    if request.method == 'POST':
+        food.delete()
+        messages.success(request, "Food item deleted successfully!")
+        return redirect('fooddetails')
+    return render(request, 'delete_food.html', {'food': food})
+
+
+
+
  #PASSWORDS
 
 def send_otp(email):
@@ -268,6 +341,31 @@ def add_decoration(request):
         obj.save()
         return redirect(decoration_details)
     return render(request,'add_decoration.html')
+
+#newrequirements...............................................................................
+
+@login_required(login_url='login')
+def update_decoration(request, id):
+    if not request.user.is_staff:
+        messages.error(request, "You are not authorized to perform this action.")
+        return redirect('admin')
+
+    decoration = get_object_or_404(Decoration, id=id)
+
+    if request.method == 'POST':
+        decoration.decoration_name = request.POST['name']
+        decoration.decoration_price = request.POST['price']
+        
+        # Only update image if a new one is provided
+        if 'image' in request.FILES:
+            decoration.decoration_image = request.FILES['image']
+            
+        decoration.save()
+        messages.success(request, "Decoration item updated successfully!")
+        return redirect('decorationdetails')
+    
+    context = {'decoration': decoration}
+    return render(request, 'update_decoration.html', context)
 
 #BOOKINGS................................................................
 

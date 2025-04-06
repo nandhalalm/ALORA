@@ -7,6 +7,7 @@
     <title>View Users | ALORA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Irish Grover" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
          body {
             background-color: #e8dad6;
@@ -147,6 +148,89 @@
             background-color: #3d3d3d;
         }
 
+        .eye-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
+        .eye-btn:hover {
+            background-color: #f0f0f0;
+            color: #2d2d2d;
+            transform: scale(1.1);
+        }
+
+        .eye-btn.active {
+            color: #2d2d2d;
+            background-color: #f0f0f0;
+        }
+
+        .hidden-details {
+            display: none;
+            background-color: #f9f9f9;
+        }
+
+        .details-content {
+            padding: 15px;
+            background-color: #e8dad6;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #6c757d;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #2d2d2d;
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .showing-entries {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .sidebar {
@@ -188,6 +272,15 @@
             .users-table td {
                 padding: 8px;
                 font-size: 12px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pagination-controls {
+                flex-direction: column;
+                gap: 10px;
             }
         }
 
@@ -252,31 +345,151 @@
                 <thead>
                     <tr>
                         <th>Sl No</th>
-                        <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Gender</th>
-                        <th>Address</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for x in user_details %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ x.user_id.first_name }}</td>
                             <td>{{ x.user_id.username }}</td>
                             <td>{{ x.user_id.email }}</td>
-                            <td>{{ x.phone_number }}</td>
-                            <td>{{ x.gender }}</td>
-                            <td>{{ x.address }}</td>
+                            <td>
+                                <button class="eye-btn" onclick="toggleDetails(this, 'details-{{ forloop.counter }}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hidden-details" id="details-{{ forloop.counter }}">
+                            <td colspan="5">
+                                <div class="details-content">
+                                    <div class="details-grid">
+                                        <div class="detail-item">
+                                            <div class="detail-label">NAME</div>
+                                            <div class="detail-value">{{ x.user_id.first_name }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-label">Phone Number</div>
+                                            <div class="detail-value">{{ x.phone_number }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-label">Gender</div>
+                                            <div class="detail-value">{{ x.gender }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-label">Address</div>
+                                            <div class="detail-value">{{ x.address }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="showing-entries">
+                        Showing <span id="start-entry">1</span> to <span id="end-entry">10</span> of <span id="total-entries">{{ user_details|length }}</span> entries
+                    </div>
+                    <div>
+                        <button id="prev-page" class="btn btn-sm btn-outline-secondary" disabled>Previous</button>
+                        <span id="page-info" class="mx-2">Page 1</span>
+                        <button id="next-page" class="btn btn-sm btn-outline-secondary">Next</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle details function
+        function toggleDetails(button, detailsId) {
+            const detailsRow = document.getElementById(detailsId);
+            const icon = button.querySelector('i');
+            
+            if (detailsRow.style.display === 'none' || !detailsRow.style.display) {
+                // Show details
+                detailsRow.style.display = 'table-row';
+                button.classList.add('active');
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                // Hide details
+                detailsRow.style.display = 'none';
+                button.classList.remove('active');
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Client-side pagination
+        document.addEventListener('DOMContentLoaded', function() {
+            const rowsPerPage = 10;
+            const tableRows = document.querySelectorAll('.users-table tbody tr:not(.hidden-details)');
+            const totalRows = tableRows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            let currentPage = 1;
+            
+            // Update pagination info
+            function updatePagination() {
+                const startEntry = (currentPage - 1) * rowsPerPage + 1;
+                const endEntry = Math.min(currentPage * rowsPerPage, totalRows);
+                
+                document.getElementById('start-entry').textContent = startEntry;
+                document.getElementById('end-entry').textContent = endEntry;
+                document.getElementById('page-info').textContent = `Page ${currentPage}`;
+                
+                // Enable/disable buttons
+                document.getElementById('prev-page').disabled = currentPage === 1;
+                document.getElementById('next-page').disabled = currentPage === totalPages;
+                
+                // Show/hide rows
+                tableRows.forEach((row, index) => {
+                    if (index >= startEntry - 1 && index < endEntry) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Ensure hidden details rows stay hidden
+                document.querySelectorAll('.hidden-details').forEach(row => {
+                    row.style.display = 'none';
+                });
+                
+                // Reset all eye buttons to closed state
+                document.querySelectorAll('.eye-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    const icon = btn.querySelector('i');
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                });
+            }
+            
+            // Event listeners for buttons
+            document.getElementById('prev-page').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+            
+            document.getElementById('next-page').addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+            
+            // Initialize pagination
+            updatePagination();
+        });
+    </script>
 </body>
 </html>

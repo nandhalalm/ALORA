@@ -34,10 +34,19 @@ urlpatterns = [
 
     path('admin', views.admin, name='admin'), 
     path('viewusers',views.viewusers,name='viewusers'),
+
     path('addhall',views.add_hall,name='addhall'),
+    path('edit-hall/<int:id>/', views.edit_hall, name='edithall'),
+    path('delete-hall/<int:id>/', views.delete_hall, name='deletehall'),
+
+    path('hall/<int:hall_id>/', views.hall_detail_view, name='hall_detail'),
+    
     path('adddetails',views.hall_details,name='halldetails'),
+
     path('addfood',views.add_food,name='addfood'),
     path('fooddetails',views.food_details,name='fooddetails'),
+    path('update_food/<int:food_id>/',views.update_food,name='update_food'),
+    path('delete_food/<int:food_id>/',views.delete_food,name='delete_food'),
 
     path('resetpassword',views.password_reset_request,name='resetpassword'),
     path('verifyotp',views.verify_otp,name='verifyotp'),
@@ -45,6 +54,8 @@ urlpatterns = [
 
     path('adddecoration',views.add_decoration,name='adddecoration'),
     path('decorationdetails',views.decoration_details,name='decorationdetails'),
+    path('update_decoration',views. update_decoration,name=' updatedecoration'),
+
 
     path('booking_page',views.booking_page,name='booking_page'),
     path('booking_view',views.booking_view,name='booking_view'),
