@@ -54,7 +54,8 @@ urlpatterns = [
 
     path('adddecoration',views.add_decoration,name='adddecoration'),
     path('decorationdetails',views.decoration_details,name='decorationdetails'),
-    path('update_decoration',views. update_decoration,name=' updatedecoration'),
+    path('updatedecoration/<int:id>',views.update_decoration,name='updatedecoration'),
+    path('delete_decoration/<int:id>/', views.delete_decoration, name='delete_decoration'),
 
 
     path('booking_page',views.booking_page,name='booking_page'),

@@ -280,7 +280,7 @@
                             <select name="hall" class="form-select" required>
                                 <option value="">Select a Hall</option>
                                 {% for hall in halls %}
-                                <option value="{{ hall.id }}">{{ hall.name }} - Capacity: {{ hall.capacity }} - Price: ₹{{ hall.price_per_day }}</option>
+                                <option value="{{ hall.id }}">{{ hall.hall_name }} - Capacity: {{ hall.capacity }} - Price: ₹{{ hall.price_per_day }}</option>
                                 {% endfor %}
                             </select>
                         </div>

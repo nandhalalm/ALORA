@@ -367,6 +367,23 @@ def update_decoration(request, id):
     context = {'decoration': decoration}
     return render(request, 'update_decoration.html', context)
 
+
+@login_required(login_url='login')
+def delete_decoration(request, id):
+    if not request.user.is_staff:
+        messages.error(request, "You are not authorized to perform this action.")
+        return redirect('admin')
+
+    decoration = get_object_or_404(Decoration, id=id)
+    
+    if request.method == 'POST':
+        decoration.delete()
+        messages.success(request, "Decoration deleted successfully!")
+        return redirect('decorationdetails')
+    
+    context = {'decoration': decoration}
+    return render(request, 'delete_decoration.html', context)
+
 #BOOKINGS................................................................
 
 @login_required(login_url='login')

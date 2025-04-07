@@ -48,6 +48,15 @@
             padding: 20px 20px;
             transition: all 0.3s;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
         }
 
         .nav-link:hover {
@@ -320,12 +329,24 @@
             <img src="{% static 'aloral.png' %}" alt="Light Bulb" class="logo-image">
         </div>
         <nav class="nav flex-column">
-            <a class="nav-link" href="{% url 'admin' %}">Home</a>
-            <a class="nav-link active" href="{% url 'viewusers' %}">View Users</a>
-            <a class="nav-link" href="{% url 'halldetails' %}">Hall Details</a>
-            <a class="nav-link" href="{% url 'fooddetails' %}">Food Details</a>
-            <a class="nav-link" href="{% url 'decorationdetails' %}">Decoration Details</a>
-            <a class="nav-link" href="{% url 'admin_view_booking' %}">View Bookings</a>
+            <a class="nav-link" href="{% url 'admin' %}">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a class="nav-link active" href="{% url 'viewusers' %}">
+                <i class="fas fa-users"></i> View Users
+            </a>
+            <a class="nav-link" href="{% url 'halldetails' %}">
+                <i class="fas fa-building"></i> Hall Details
+            </a>
+            <a class="nav-link" href="{% url 'fooddetails' %}">
+                <i class="fas fa-utensils"></i> Food Details
+            </a>
+            <a class="nav-link" href="{% url 'decorationdetails' %}">
+                <i class="fas fa-paint-brush"></i> Decoration Details
+            </a>
+            <a class="nav-link" href="{% url 'admin_view_booking' %}">
+                <i class="fas fa-calendar-check"></i> View Bookings
+            </a>
         </nav>
     </div>
 
