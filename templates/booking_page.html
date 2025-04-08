@@ -7,6 +7,7 @@
     <title>ALORA Booking</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Irish+Grover" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         body {
@@ -22,8 +23,38 @@
             font-weight: bold;
         }
 
+        /* Navigation Styles */
+        .topnav {
+            background-color: black;
+            color: white;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .alora {
+            width: 110px;
+            margin-left: 40px;
+            display: flex;
+            padding-top: 10px;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+        }
+
+        .topmenu {
+            width: 550px;
+            margin-right: 500px;
+        }
+
         .topmenu a {
-            padding: 10px;
+            padding: 10px 18px;
             color: white;
             text-decoration: none;
             font-size: large;
@@ -33,22 +64,285 @@
             background-color: rgb(86, 86, 86);
         }
 
+        /* Toggle Button Styles */
+        .toggle-button {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 17px;
+            z-index: 1001;
+        }
+
+        .toggle-button .bar {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        /* Gallery Styles */
         .gallery-wrapper {
             margin-top: 20px;
         }
 
+        .small-img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Booking Form Styles */
         .book-form {
-            background: rgba(239, 139, 139, 0.8);
-            padding: 20px;
+            background: #ffffff;
+            padding: 25px 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0 !important;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .book-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #ff5a5a;
+            z-index: 1;
         }
 
         .book-form h3 {
-            text-align: center;
+            font-family: 'Irish Grover';
             color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            text-align: center;
         }
 
+        .event-title-accent {
+            color: #ff5a5a;
+            position: relative;
+        }
+
+        .book-form .form-label {
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .custom-input, .custom-select {
+            border: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+            padding: 10px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .custom-input:focus, .custom-select:focus {
+            border-color: #ff5a5a;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 90, 90, 0.1);
+            outline: none;
+        }
+
+        /* Selection Cards */
+        .selection-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .selection-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border-color: #ff5a5a;
+        }
+
+        .selection-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .selection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 90, 90, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        input[type="radio"]:checked ~ .selection-image-container .selection-overlay {
+            opacity: 1;
+        }
+
+        input[type="radio"]:checked ~ .selection-card {
+            border-color: #ff5a5a;
+            box-shadow: 0 3px 8px rgba(255, 90, 90, 0.2);
+        }
+
+        .checkmark {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .selection-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #333;
+            margin-top: 5px;
+            transition: color 0.3s;
+            text-align: center;
+        }
+
+        .selection-detail {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+        }
+
+        .selection-price {
+            font-weight: 700;
+            color: #ff5a5a;
+            background-color: rgba(255, 90, 90, 0.1);
+            border-radius: 12px;
+            padding: 2px 8px;
+            display: inline-block;
+            margin-top: 3px;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        input[type="radio"]:checked ~ .selection-label {
+            color: #ff5a5a;
+        }
+
+        /* Custom Radio Buttons */
+        .custom-radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .custom-radio {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-left: 28px;
+            cursor: pointer;
+            font-size: 14px;
+            user-select: none;
+            color: #555;
+        }
+
+        .custom-radio input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        .custom-radio:hover input ~ .radio-checkmark {
+            background-color: #f0f0f0;
+            border-color: #ccc;
+        }
+
+        .custom-radio input:checked ~ .radio-checkmark {
+            background-color: #fff;
+            border-color: #ff5a5a;
+        }
+
+        .radio-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-radio input:checked ~ .radio-checkmark:after {
+            display: block;
+        }
+
+        .custom-radio .radio-checkmark:after {
+            top: 4px;
+            left: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff5a5a;
+        }
+
+        /* Book Now Button */
+        .btn-book-now {
+            background: #ff5a5a;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-book-now:hover {
+            background: #ff3366;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 90, 90, 0.3);
+        }
+
+        .btn-book-now:active {
+            transform: translateY(0);
+        }
+
+        /* Footer Styles */
         .footer {
             background-color: #222;
             color: white;
@@ -109,129 +403,93 @@
         .address {
             font-style: italic;
         }
+
+        /* Responsive Adjustments */
         @media (max-width: 991px) { 
             .gallery-wrapper {
-                flex-direction: column; /* Stack images and form */
-                align-items: center; /* Center everything */
+                flex-direction: column;
+                align-items: center;
             }
         
             .book-form {
-                width: 100%; /* Adjust form width */
-                margin-top: 10px !important; /* Ensure minimal spacing */
-                min-height: auto; /* Allow dynamic height */
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                margin-top: 15px !important;
+                max-height: none;
+                position: static;
             }
         }
-        
+
         @media (max-width: 768px) {
+            .toggle-button {
+                display: flex;
+            }
+
             .topnav {
-                flex-direction: column;
-                text-align: center;
-                height: auto;
+                justify-content: center;
                 padding: 10px 0;
             }
+
+            .alora {
+                margin-left: 0;
+            }
+
             .topmenu {
-                display: flex;
+                display: none;
                 flex-direction: column;
-                align-items: center;
+                width: 100%;
+                background-color: black;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                margin-right: 0;
+                z-index: 1000;
             }
+
+            .topmenu.active {
+                display: flex;
+            }
+
             .topmenu a {
-                padding: 8px;
+                padding: 15px;
+                text-align: center;
             }
+
             .footer-container {
                 flex-direction: column;
                 text-align: center;
             }
-            .book-form {
-                min-height: 600px; /* Increase height for smaller screens */
-            }
         }
-        .small-img {
-            width: 100%; /* Adjust percentage as needed */
-            height: 100%;
+
+        /* Ensure proper spacing between form elements */
+        .book-form .mb-2 {
+            margin-bottom: 15px !important;
         }
-        .navbar-nav .nav-link {
-            color: white !important;
-        }
-        
-        .navbar-nav .nav-link:hover {
-           
-            background-color: rgb(86, 86, 86);
-        }
-        .navbar-brand {
-            margin-left: 40px; /* Adjust as needed */
-        }
-        .custom-navbar .nav-link {
-            font-size: 20px; /* Increase font size */
-            padding: 5px 0; /* Increase space between items */
-        }
-        .custom-navbar {
-            gap: 30px; /* Adjust spacing between items */
-        }
-        .book-form {
-            background: rgba(239, 139, 139, 0.8);
-            padding: 50px; /* Increase padding */
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            min-height: 40%; /* Adjust minimum height */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-top: 45%;
-            gap: 30px; 
-        }
+
         .book-form .mb-3 {
-            width: 100%; /* Ensures inputs take full width */
-            margin-bottom: 50px; /* Space between form fields */
+            margin-bottom: 20px !important;
         }
-        
-        .book-form label {
-            font-weight: bold; /* Makes labels more readable */
-            margin-bottom: 5px; /* Adds small space below labels */
-        }
-        
     </style>
 </head>
 <body>
-  <!-- Top Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-black">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <h3 class="mb-0" style="font-family: 'Irish Grover', cursive;">ALORA</h3>
-            <img src="{% static 'aloral.png' %}" class="ms-2" alt="Alora Logo" width="30">
-        </a>
-        
-        <!-- Navbar Toggler for Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Collapsible Navbar Links (Centered) -->
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav text-center ms-3 custom-navbar">
-                <li class="nav-item">
-                    <a class="nav-link" href="#Home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#services">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#About">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#Gallery">Gallery</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#testimony">Testimonials</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+  <!-- New Navigation Bar -->
+  <div class="topnav">
+      <div class="alora">
+          <h3>ALORA</h3>
+          <img src="{% static 'aloral.png' %}" class="logo">
+      </div>
+      <div class="topmenu">
+          <a href="{% url 'home' %}">Home</a>
+          <a href="{% url 'service' %}">Services</a>
+          <a href="{% url 'about' %}">About</a>
+          <a href="{% url 'gallery' %}">Gallery</a>
+          <a href="{% url 'testimonials' %}">Testimonials</a>
+      </div>
+      <!-- Toggle Button for Mobile -->
+      <div class="toggle-button">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+      </div>
+  </div>
 
     <!-- Main Content -->
     <div class="container mt-5">
@@ -252,15 +510,10 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <img src="{% static 'wedgall.webp' %}" alt="stage" class="img-fluid rounded border">
-                        <img src="{% static 'haldi.jpeg' %}" alt="haldi2" class="img-fluid rounded border mt-2">
+                        <img src="{% static 'party1.jpeg' %}" alt="haldi2" class="img-fluid rounded border mt-2" style="height: 295px; object-fit: cover; width: 400px;">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <img src="{% static 'wwt.jpg' %}" alt="wed2" class="img-fluid rounded border small-img ">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <img src="{% static 'party1.jpeg' %}"alt="party" class="img-fluid rounded border">
+                        <img src="{% static 'wwt.jpg' %}" alt="wed2" class="img-fluid rounded border small-img" style="height: 507px; object-fit: cover;">
                     </div>
                 </div>
             </div>
@@ -268,56 +521,117 @@
             <!-- Booking Form -->
             <div class="col-lg-6">
                 <div class="book-form">
-                    <h3>Book Your Event</h3>
-                    <form action="{% url 'booking_page' %}" method="POST">
+                    <h3 class="text-center mb-3" style="font-family: 'Georgia', serif;">
+                        <span class="event-title-accent">Book Your</span> Dream Event
+                    </h3>
+                    
+                    <form method="post">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="event_date">Select Date:</label>
-                            <input type="date" id="event_date" name="event_date" class="form-control" min="" required>
+                        <div class="mb-2">
+                            <label for="event_date" class="form-label">Event Date:</label>
+                            <div class="input-wrapper">
+                                <input type="date" id="event_date" name="event_date" class="form-control custom-input" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="hall">Select Hall:</label>
-                            <select name="hall" class="form-select" required>
-                                <option value="">Select a Hall</option>
+
+                        <div class="mb-2">
+                            <label class="form-label">Select Hall:</label>
+                            <div class="row g-2">
                                 {% for hall in halls %}
-                                <option value="{{ hall.id }}">{{ hall.hall_name }} - Capacity: {{ hall.capacity }} - Price: ₹{{ hall.price_per_day }}</option>
+                                <div class="col-md-4 mb-2">
+                                    <div class="selection-card hall-card">
+                                        <label class="d-block text-center hall-selection">
+                                            <input type="radio" name="hall" value="{{ hall.id }}" class="d-none" required>
+                                            <div class="selection-image-container">
+                                                <img src="{{ hall.photo_url.url }}" alt="{{ hall.name }}" class="img-fluid rounded hall-option" style="cursor:pointer; height: 80px; object-fit: cover;">
+                                                <div class="selection-overlay">
+                                                    <span class="checkmark">✓</span>
+                                                </div>
+                                            </div>
+                                            <div class="selection-label">{{ hall.name }}</div>
+                                            <div class="selection-detail">Capacity: {{ hall.capacity }}</div>
+                                            <div class="selection-price">₹{{ hall.price_per_day }}</div>
+                                        </label>
+                                    </div>
+                                </div>
                                 {% endfor %}
-                            </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="food">Select Food (Optional):</label>
-                            <select name="food" class="form-select">
-                                <option value="">No Food</option>
-                                {% for item in foods %}
-                                <option value="{{ item.id }}">{{ item.food_name }} - ₹{{ item.food_price }}</option>
+
+                        <div class="mb-2">
+                            <label class="form-label">Select Food (Optional):</label>
+                            <div class="row g-2">
+                                <!-- No Food Option -->
+                                <div class="col-md-4 mb-2">
+                                    <div class="selection-card food-card">
+                                        <label class="d-block text-center food-selection">
+                                            <input type="radio" name="food" value="" class="d-none" checked>
+                                            <div class="selection-image-container">
+                                                <div class="selection-overlay">
+                                                    <span class="checkmark">✓</span>
+                                                </div>
+                                            </div>
+                                            <div class="selection-label">No Food</div>
+                                            <div class="selection-price">₹0</div>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% for food in foods %}
+                                <div class="col-md-4 mb-2">
+                                    <div class="selection-card food-card">
+                                        <label class="d-block text-center food-selection">
+                                            <input type="radio" name="food" value="{{ food.id }}" class="d-none">
+                                            <div class="selection-image-container">
+                                                <img src="{{ food.food_image.url }}" alt="{{ food.food_name }}" class="img-fluid rounded food-option" style="cursor:pointer; height: 70px; object-fit: cover;">
+                                                <div class="selection-overlay">
+                                                    <span class="checkmark">✓</span>
+                                                </div>
+                                            </div>
+                                            <div class="selection-label">{{ food.food_name }}</div>
+                                            <div class="selection-price">₹{{ food.food_price }}</div>
+                                        </label>
+                                    </div>
+                                </div>
                                 {% endfor %}
-                            </select>
+                            </div>
                         </div>
+
+                        <div class="mb-2">
+                            <label for="no_of_persons" class="form-label">Number of Guests:</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="no_of_persons" name="no_of_persons" class="form-control custom-input" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="decoration" class="form-label">Select Decoration (Optional):</label>
+                            <div class="input-wrapper">
+                                <select id="decoration" name="decoration" class="form-select custom-select">
+                                    <option value="">No Decoration</option>
+                                    {% for decoration in decorations %}
+                                    <option value="{{ decoration.id }}">{{ decoration.decoration_name }} - ₹{{ decoration.decoration_price }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
-                            <label for="decoration">Select Decoration (Optional):</label>
-                            <select name="decoration" class="form-select">
-                                <option value="">No Decoration</option>
-                                {% for deco in decorations %}
-                                <option value="{{ deco.id }}">{{ deco.decoration_name }} - ₹{{ deco.decoration_price }}</option>
-                                {% endfor %}
-                            </select>
+                            <label class="form-label">Photography:</label>
+                            <div class="custom-radio-group">
+                                <label class="custom-radio">
+                                    <input type="radio" name="photography" value="yes" id="photoYes">
+                                    <span class="radio-label">Yes (₹{{ photography_price }})</span>
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                                <label class="custom-radio">
+                                    <input type="radio" name="photography" value="no" id="photoNo" checked>
+                                    <span class="radio-label">No</span>
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="photography">Photography (₹5000):</label>
-                            <select name="photography" class="form-select">
-                                <option value="no">No</option>
-                                <option value="yes">Yes</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="no_of_persons">Number of Persons:</label>
-                            <input type="number" name="no_of_persons" class="form-control" min="1" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="customization">Customization:</label>
-                            <input type="text" id="customization" name="customization" class="form-control" placeholder="Enter customization preferences">
-                        </div>
-                        <button type="submit" class="btn btn-danger w-100">Book Now</button>
+
+                        <button type="submit" class="btn-book-now">Book Your Event Now</button>
                     </form>
                 </div>
             </div>
@@ -340,11 +654,11 @@
             <div class="footer-section">
                 <div class="footer-title">Links</div>
                 <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Gallery</a></li>
-                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'service' %}">Services</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                    <li><a href="{% url 'testimonials' %}">Testimonials</a></li>
                 </ul>
             </div>
             
@@ -367,9 +681,56 @@
         </div>
     </footer>
 
-    <script>
-        document.getElementById("event_date").min = new Date().toISOString().split("T")[0];
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced selection script for impressive form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hall selection
+            document.querySelectorAll('.hall-option').forEach(img => {
+                img.addEventListener('click', () => {
+                    // Reset all selections
+                    document.querySelectorAll('.hall-selection input').forEach(input => {
+                        input.checked = false;
+                    });
+                    
+                    // Set selected
+                    const input = img.closest('label').querySelector('input[type="radio"]');
+                    input.checked = true;
+                });
+            });
+
+            // Food selection
+            document.querySelectorAll('.food-option').forEach(img => {
+                img.addEventListener('click', () => {
+                    // Reset all selections
+                    document.querySelectorAll('.food-selection input').forEach(input => {
+                        input.checked = false;
+                    });
+                    
+                    // Set selected
+                    const input = img.closest('label').querySelector('input[type="radio"]');
+                    input.checked = true;
+                });
+            });
+            
+            // Add animation effect to the button
+            const bookButton = document.querySelector('.btn-book-now');
+            if (bookButton) {
+                bookButton.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+            }
+            
+            // Toggle Button functionality
+            const toggleButton = document.querySelector('.toggle-button');
+            const topmenu = document.querySelector('.topmenu');
+
+            if (toggleButton) {
+                toggleButton.addEventListener('click', () => {
+                    topmenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

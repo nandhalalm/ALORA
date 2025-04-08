@@ -61,6 +61,8 @@ urlpatterns = [
     path('booking_page',views.booking_page,name='booking_page'),
     path('booking_view',views.booking_view,name='booking_view'),
     path('admin_view_booking',views.admin_view_booking,name='admin_view_booking'),
+    path('booking_detail/<int:id>/', views.booking_detail, name='booking_detail'),
+    
     path('acceptrejectbooking/<int:id>',views.accept_reject_booking,name='acceptrejectbooking'),
 
     path('payment/<int:id>', views.stripe_payments, name='payment'),

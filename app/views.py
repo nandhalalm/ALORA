@@ -450,6 +450,23 @@ def booking_view(request):
     } 
      return render(request, 'booking_view.html', context)
 
+@login_required(login_url='login')
+def booking_detail(request, id):
+    booking = get_object_or_404(
+        Bookings.objects.select_related('user_id', 'hall_id', 'food', 'decoration'), 
+        id=id
+    )
+
+    if not request.user.is_staff and booking.user_id != request.user:
+        messages.error(request, "You are not authorized to view this booking.")
+        return redirect('home')
+    
+    context = {
+        'booking': booking,
+    }
+    return render(request, 'bookingdetail.html', context)
+
+
 #...............ADMIN.....................
 
 def admin_view_booking(request):
