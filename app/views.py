@@ -537,15 +537,19 @@ def payment_status(request, id):
     messages.success(request, "Payment completed successfully!")
     return render(request, 'payment_status.html')
 
+@login_required(login_url='login')
 def service(request):
     return render(request,'service.html')
 
+@login_required(login_url='login')
 def about(request):
     return render(request,'aboutus.html')
 
+@login_required(login_url='login')
 def gallery(request):
     return render(request,'gallery.html')
 
+@login_required(login_url='login')
 def testimonials(request):
     return render(request,'testimonials.html')
  
